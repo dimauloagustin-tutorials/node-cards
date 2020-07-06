@@ -2,7 +2,7 @@
 
 #login-container {
   height: 400px;
-  width: 350px;
+  min-width: 300px;
   padding: 20px;
   border-radius: 5px;
   background: #fffffb;
@@ -28,7 +28,7 @@
 #login-container .social div {
   text-align: center;
   border: solid 2px #ff6b6c;
-  width: 75px;
+  width: 25%;
   padding: 5px 0;
   border-radius: 5px;
 }
