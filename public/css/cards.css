@@ -1,0 +1,52 @@
+.cards-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cards-grid::after {
+  content: "";
+  flex: auto;
+}
+
+.card {
+  box-sizing: border-box;
+  flex: 1 1;
+  margin: 1em;
+}
+
+/*TODO - find a better way to do it*/
+
+@media screen and (max-width: 45em) {
+  .card {
+      min-width: calc(100% - 2em);
+    margin: 1em;
+  }
+}
+
+@media screen and (min-width: 51em) {
+  .card {
+    min-width: calc(100% / 2 - 2em);
+    max-width: calc(100% / 2 - 2em);
+  }
+}
+
+@media screen and (min-width: 76em) {
+  .card {
+    min-width: calc(100% / 3 - 2em);
+    max-width: calc(100% / 3 - 2em);
+  }
+}
+
+@media screen and (min-width: 100em) {
+  .card {
+    min-width: calc(100% / 4 - 2em);
+    max-width: calc(100% / 4 - 2em);
+  }
+}
+
+@media screen and (min-width: 150em) {
+    .card {
+        min-width: auto;
+        max-width: none;
+    }
+  }
