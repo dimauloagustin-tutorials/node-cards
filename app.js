@@ -13,7 +13,9 @@ app.use(express.static(pather('public')));
 app.use(bodyParser.urlencoded({extended: false}));
 
 const homeRoutes = require('./routes/home');
+const adminRoutes = require('./routes/admin');
 app.use(homeRoutes);
+app.use('/admin',adminRoutes);
 
 app.use(errorController.get404);
 
