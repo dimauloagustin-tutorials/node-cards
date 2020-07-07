@@ -83,6 +83,12 @@
   color: #ff6b6c;
 }
 
+.ticket-description {
+  text-align: justify;
+  text-justify: inter-word;
+  height: 25%;
+}
+
 @-webkit-keyframes gradientBG {
   0% {
     background-position: 0% 50%;
