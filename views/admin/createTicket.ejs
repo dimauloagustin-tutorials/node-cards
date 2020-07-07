@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Create Ticket</title>
+  </head>
+
+  <body>
+    <main>
+      <form tickets action="/admin/add-ticket" method="POST">
+        <div tickets>
+          <label for="title">Title</label>
+          <input type="text" name="title" id="title" />
+        </div>
+        <div tickets>
+          <label for="description">Description</label>
+          <textarea name="description" id="description" rows="5"></textarea>
+        </div>
+        <div tickets>
+          <label for="type">Type</label>
+          <input type="text" name="type" id="type" />
+        </div>
+        <div tickets>
+          <label for="endDate">End date</label>
+          <input type="date" name="endDate" id="endDate" />
+        </div>
+        <button type="submit">Add Product</button>
+      </form>
+    </main>
+  </body>
+</html>
