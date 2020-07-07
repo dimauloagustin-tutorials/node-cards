@@ -1,3 +1,9 @@
+const Ticket = require("../models/ticket");
+
 exports.getCards = (req, res, next) => {
-    res.render('home/cards');
+  Ticket.fetchAll((tickets) => {
+    res.render("home/cards", {
+        tickets: tickets
+    });
+  });
 };

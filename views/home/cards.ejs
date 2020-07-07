@@ -7,32 +7,35 @@
     <title>Tickets</title>
     <link rel="stylesheet" href="/css/cards.css" />
     <link rel="stylesheet" href="/css/tickets.css" />
-    <link rel="stylesheet" href="/css/thirdPartyLibraries/font-awesome-4.7.0/css/font-awesome.min.css" />
+    <link
+      rel="stylesheet"
+      href="/css/thirdPartyLibraries/font-awesome-4.7.0/css/font-awesome.min.css"
+    />
   </head>
 
   <body>
     <main>
       <section class="cards-grid">
-        <% for (var i = 0; i < 1; i++) { %>
+        <% for (let ticket of tickets) { %>
         <article class="card">
           <div id="ticket-container">
             <h1>
-              Maddie
+              <%= ticket.title %>
             </h1>
             <div class="ticket-description">
-              Maddie is a front end web developer in New York. She has worked in the field for 10 years now. Check out her projects in the links below. She is available for hire as well.
+                <%= ticket.description.length > 256 ?  ticket.description.substring(0, 256).concat('...') : ticket.description %>
             </div>
             <button>Usar</button>
             <div class="ticket-subItem">
-              <div>Comida</div>
+              <div><%= ticket.type %></div>
               <div>10 dias</div>
             </div>
             <footer>
               <div>
-                <p><i class='fa fa-heart-o'></i></p>
+                <p><i class="fa fa-heart-o"></i></p>
               </div>
               <div>
-                <p>10/10/2019</p>
+                <p><%= ticket.createDate %></p>
               </div>
             </footer>
           </div>
