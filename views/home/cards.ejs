@@ -16,6 +16,7 @@
   <body>
     <main>
       <section class="cards-grid">
+        <% var currentDate = new Date() %>
         <% for (let ticket of tickets) { %>
         <article class="card">
           <div id="ticket-container">
@@ -23,19 +24,22 @@
               <%= ticket.title %>
             </h1>
             <div class="ticket-description">
-                <%= ticket.description.length > 256 ?  ticket.description.substring(0, 256).concat('...') : ticket.description %>
+                <%= ticket.description.length > 200 ?  ticket.description.substring(0, 200).concat('...') : ticket.description %>
             </div>
             <button>Usar</button>
             <div class="ticket-subItem">
               <div><%= ticket.type %></div>
-              <div>10 dias</div>
+              <% var endDateT = ticket.endDate.split('-'); %> 
+              <% var endDate = new Date(parseInt(endDateT[0]),parseInt(endDateT[1] - 1),parseInt(endDateT[2]),0,0,0,0); %> 
+              <div><%= Math.trunc((endDate.getTime() - currentDate.getTime())/ (1000 * 3600 * 24)) %> dias</div>
             </div>
             <footer>
               <div>
                 <p><i class="fa fa-heart-o"></i></p>
               </div>
               <div>
-                <p><%= ticket.createDate %></p>
+                <% var createDate = ticket.createDate.split('-'); %>
+                <p><%= createDate[2] + '/' + createDate[1] + '/' + createDate[0] %></p>
               </div>
             </footer>
           </div>
