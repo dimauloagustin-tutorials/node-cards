@@ -32,7 +32,11 @@
   padding: 5px 0;
   border-radius: 5px;
 }
-#ticket-container button {
+#ticket-container .ticket-subItem .ticket-expired {
+  background-color: #ff6b6c;
+  color: white;
+}
+#ticket-container .ticket-action {
   width: 80%;
   height: 80px;
   font-size: 2rem;
@@ -45,6 +49,22 @@
   background-size: 300% 300%;
   outline: none;
   transition: all 200ms ease-in-out;
+}
+#ticket-container .ticket-favButton {
+  border: 0;
+  display: flex;
+  color: #ff6b6c;
+  padding: 0;
+  background-color: unset;
+}
+#ticket-container .ticket-favButton:hover{
+	background:none;
+	outline:none;
+  padding:0;
+  cursor: pointer;
+}
+#ticket-container .ticket-createDate {
+  margin: 0;
 }
 #ticket-container button:hover {
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
