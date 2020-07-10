@@ -54,14 +54,12 @@ module.exports = class Product {
   }
 
   static fetchAllUsed(cb) {
-    const currentDate = new Date().toISOString().substring(0,10);
     getTicketsFromFile((tickets) => {
       cb(tickets.filter(ticket => ticket.state == 'USED'));
     });
   }
 
   static fetchAllFavorites(cb) {
-    const currentDate = new Date().toISOString().substring(0,10);
     getTicketsFromFile((tickets) => {
       cb(tickets.filter(ticket => ticket.isFav == true));
     });
