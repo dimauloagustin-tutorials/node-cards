@@ -2,6 +2,6 @@ const express = require('express');
 const homeController = require('../controllers/home');
 const router = express.Router();
 
-router.get('/', homeController.getCards);
+router.get('/', homeController.getCardsAll);
 
 module.exports = router;
