@@ -23,6 +23,7 @@ module.exports = class Product {
     this.endDate = endDate;
     this.createDate = createDate;
     this.state = 'AVAILABE';  //TODO - change to enum
+    this.isFav = false;
   }
 
   save() {
