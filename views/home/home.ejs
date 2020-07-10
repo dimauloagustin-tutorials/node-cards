@@ -29,7 +29,7 @@
           <button class="ticket-action">Usar</button>
           <div class="ticket-subItem">
             <div><%= ticket.type %></div>
-            <% if (ticket.endDate < currentDate.toISOString().substring(0,10)) { %>
+            <% if (ticket.endDate >= currentDate.toISOString().substring(0,10)) { %>
             <% var endDateT = ticket.endDate.split('-'); %>
             <% var endDate = new Date(parseInt(endDateT[0]),parseInt(endDateT[1] - 1),parseInt(endDateT[2]),0,0,0,0); %>
             <div>
