@@ -41,7 +41,7 @@
           </div>
           <footer>
             <div class="ticket-favButton">
-              <i class="fa fa-heart-o"></i>
+              <i class="fa <%= ticket.isFav ? 'fa-heart' : 'fa-heart-o' %>"></i>
             </div>
             <div>
               <% var createDate = ticket.createDate.split('-'); %>
