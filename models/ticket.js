@@ -30,34 +30,42 @@ const getTicketsFromFile = (cb) => {
 };
 
 module.exports = class Ticket {
-  constructor(title, description, type, endDate, createDate) {
-    this.id = uuid.v4();
+  constructor(id, title, description, type, endDate, createDate, state, isFav) {
+    this.id = id;
     this.title = title;
     this.description = description;
     this.type = type;
     this.endDate = endDate;
     this.createDate = createDate;
-    this.state = "AVAILABLE"; //TODO - change to enum
-    this.isFav = false;
+    this.state = state;
+    this.isFav = isFav;
   }
 
   save() {
     getTicketsFromFile((tickets) => {
-      tickets.push(this);
+      var index = tickets.findIndex((t) => t.id == this.id);
+      if (index === -1) {
+        tickets.push(this);
+      } else {
+        tickets[index] = this;
+      }
       fs.writeFile(p, JSON.stringify(tickets), (err) => {
         if (err !== null) console.log(err);
       });
     });
   }
 
-  static update(id, ticket) {
-    getTicketsFromFile((tickets) => {
-      tickets.splice(tickets.findIndex(t => t.id == id),1);
-      tickets.push(ticket);
-      fs.writeFile(p, JSON.stringify(tickets), (err) => {
-        if (err !== null) console.log(err);
-      });
-    });
+  static createTicket(title, description, type, endDate, createDate) {
+    return new Ticket(
+      uuid.v4(),
+      title,
+      description,
+      type,
+      endDate,
+      createDate,
+      "AVAILABLE",
+      false
+    );
   }
 
   static fetchAll(cb) {
