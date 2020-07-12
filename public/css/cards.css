@@ -14,8 +14,6 @@
   margin: 1em;
 }
 
-/*TODO - find a better way to do it*/
-
 @media screen and (max-width: 45em) {
   .card {
       min-width: calc(100% - 2em);
