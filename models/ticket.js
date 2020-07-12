@@ -83,30 +83,15 @@ module.exports = class Ticket {
     });
   }
 
-  //TODO - refactor in one function
-  static fetchAllAvailables(cb) {
-    const currentDate = new Date().toISOString().substring(0, 10);
+  static fetchByState(state, cb) {
     getTicketsFromFile((tickets) => {
-      cb(tickets.filter((ticket) => ticket.state == this.STATE_AVAILABLE));
+      cb(tickets.filter((ticket) => ticket.state == state));
     });
   }
 
-  static fetchAllExpired(cb) {
-    const currentDate = new Date().toISOString().substring(0, 10);
+  static fetchByFav(state, cb) {
     getTicketsFromFile((tickets) => {
-      cb(tickets.filter((ticket) => ticket.state == this.STATE_EXPIRED));
-    });
-  }
-
-  static fetchAllUsed(cb) {
-    getTicketsFromFile((tickets) => {
-      cb(tickets.filter((ticket) => ticket.state == this.STATE_USED));
-    });
-  }
-
-  static fetchAllFavorites(cb) {
-    getTicketsFromFile((tickets) => {
-      cb(tickets.filter((ticket) => ticket.isFav == true));
+      cb(tickets.filter((ticket) => ticket.isFav == state));
     });
   }
 };
