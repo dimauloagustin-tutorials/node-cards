@@ -9,12 +9,27 @@ const getTicketsFromFile = (cb) => {
     if (err) {
       cb([]);
     } else {
-      cb(JSON.parse(fileContent));
+      var tickets = JSON.parse(fileContent);
+      //TODO - quit this code, just temporal workaround
+      const currentDate = new Date().toISOString().substring(0, 10);
+      var expiredFound = false;
+      tickets.forEach((t) => {
+        if (t.state == "AVAILABLE" && t.endDate < currentDate) {
+          t.state = "EXPIRED";
+          expiredFound = true;
+        }
+      });
+      if (expiredFound)
+        fs.writeFile(p, JSON.stringify(tickets), (err) => {
+          if (err !== null) console.log(err);
+        });
+      //TODO - quit this code, just temporal workaround
+      cb(tickets);
     }
   });
 };
 
-module.exports = class Product {
+module.exports = class Ticket {
   constructor(title, description, type, endDate, createDate) {
     this.id = uuid.v4();
     this.title = title;
@@ -22,7 +37,7 @@ module.exports = class Product {
     this.type = type;
     this.endDate = endDate;
     this.createDate = createDate;
-    this.state = 'AVAILABE';  //TODO - change to enum
+    this.state = "AVAILABLE"; //TODO - change to enum
     this.isFav = false;
   }
 
@@ -35,7 +50,50 @@ module.exports = class Product {
     });
   }
 
+  static update(id, ticket) {
+    getTicketsFromFile((tickets) => {
+      tickets.splice(tickets.findIndex(t => t.id == id),1);
+      tickets.push(ticket);
+      fs.writeFile(p, JSON.stringify(tickets), (err) => {
+        if (err !== null) console.log(err);
+      });
+    });
+  }
+
   static fetchAll(cb) {
     getTicketsFromFile(cb);
+  }
+
+  static fetchSpecific(ticketId, cb) {
+    getTicketsFromFile((tickets) => {
+      cb(tickets.find((ticket) => ticket.id == ticketId));
+    });
+  }
+
+  //TODO - refactor in one function
+  static fetchAllAvailables(cb) {
+    const currentDate = new Date().toISOString().substring(0, 10);
+    getTicketsFromFile((tickets) => {
+      cb(tickets.filter((ticket) => ticket.state == "AVAILABLE"));
+    });
+  }
+
+  static fetchAllExpired(cb) {
+    const currentDate = new Date().toISOString().substring(0, 10);
+    getTicketsFromFile((tickets) => {
+      cb(tickets.filter((ticket) => ticket.state == "EXPIRED"));
+    });
+  }
+
+  static fetchAllUsed(cb) {
+    getTicketsFromFile((tickets) => {
+      cb(tickets.filter((ticket) => ticket.state == "USED"));
+    });
+  }
+
+  static fetchAllFavorites(cb) {
+    getTicketsFromFile((tickets) => {
+      cb(tickets.filter((ticket) => ticket.isFav == true));
+    });
   }
 };

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Tickets</title>
+  <%- include('../includes/headers.ejs') %>
+  <link rel="stylesheet" href="/css/cards.css" />
+  <link rel="stylesheet" href="/css/tickets.css" />
+  <script src="/js/home/favButtonScript.js"></script>
+</head>
+
+<body>
+  <%- include('../includes/navigation.ejs') %>
+
+  <main class="page-content">
+    <section class="cards-grid">
+      <% var currentDate = new Date() %>
+      <% for (let ticket of tickets) { %>
+      <article class="card">
+        <div id="ticket-container">
+          <input id="ID" type="hidden" value="<%= ticket.id %>">
+          <h1>
+            <%= ticket.title %>
+          </h1>
+          <div class="ticket-description">
+            <%= ticket.description.length > 200 ? ticket.description.substring(0, 200).concat('...') : ticket.description %>
+          </div>
+          <% if(ticket.state == 'AVAILABLE') { %>
+          <button class="ticket-action ticket-action-available">Usar</button>
+          <% } else if(ticket.state == 'USED') { %>
+          <button class="ticket-action ticket-action-used">Usado</button>
+          <% } else { %>
+          <button class="ticket-action ticket-action-expired">Expirado</button>
+          <% } %>
+          <div class="ticket-subItem">
+            <div><%= ticket.type %></div>
+            <% if (ticket.state == 'EXPIRED') { %>
+              <div class="ticket-expired">Expirado</div>
+            <% } else { %>
+              <% var endDateT = ticket.endDate.split('-'); %>
+              <% var endDate = new Date(parseInt(endDateT[0]),parseInt(endDateT[1] - 1),parseInt(endDateT[2]),0,0,0,0); %>
+              <div> <%= Math.trunc((endDate.getTime() - currentDate.getTime())/ (1000 * 3600 * 24)) %> dias </div>
+            <% } %>
+          </div>
+          <footer>
+            <div class="ticket-favButton">
+              <i class="fa <%= ticket.isFav ? 'fa-heart' : 'fa-heart-o' %>"></i>
+            </div>
+            <div>
+              <% var createDate = ticket.createDate.split('-'); %>
+              <p class="ticket-createDate">
+                <%= createDate[2] + '/' + createDate[1] + '/' + createDate[0] %>
+              </p>
+            </div>
+          </footer>
+        </div>
+      </article>
+      <% } %>
+    </section>
+  </main>
+</body>
+
+</html>
