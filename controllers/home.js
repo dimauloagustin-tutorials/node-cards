@@ -1,6 +1,6 @@
 const Ticket = require("../models/ticket");
 //TODO - make it look better
-exports.getCardsAll = (req, res, next) => {
+exports.getCards = (req, res, next) => {
   switch (req.query.view) {
     case "1":
       Ticket.fetchByState(Ticket.STATE_AVAILABLE, (tickets) => {
