@@ -27,17 +27,21 @@
           <div class="ticket-description">
             <%= ticket.description.length > 200 ? ticket.description.substring(0, 200).concat('...') : ticket.description %>
           </div>
-          <button class="ticket-action">Usar</button>
+          <% if(ticket.state == 'AVAILABLE') { %>
+          <button class="ticket-action ticket-action-available">Usar</button>
+          <% } else if(ticket.state == 'USED') { %>
+          <button class="ticket-action ticket-action-used">Usado</button>
+          <% } else { %>
+          <button class="ticket-action ticket-action-expired">Expirado</button>
+          <% } %>
           <div class="ticket-subItem">
             <div><%= ticket.type %></div>
-            <% if (ticket.endDate >= currentDate.toISOString().substring(0,10)) { %>
-            <% var endDateT = ticket.endDate.split('-'); %>
-            <% var endDate = new Date(parseInt(endDateT[0]),parseInt(endDateT[1] - 1),parseInt(endDateT[2]),0,0,0,0); %>
-            <div>
-              <%= Math.trunc((endDate.getTime() - currentDate.getTime())/ (1000 * 3600 * 24)) %> dias
-            </div>
+            <% if (ticket.state == 'EXPIRED') { %>
+              <div class="ticket-expired">Expirado</div>
             <% } else { %>
-            <div class="ticket-expired">Expirado</div>
+              <% var endDateT = ticket.endDate.split('-'); %>
+              <% var endDate = new Date(parseInt(endDateT[0]),parseInt(endDateT[1] - 1),parseInt(endDateT[2]),0,0,0,0); %>
+              <div> <%= Math.trunc((endDate.getTime() - currentDate.getTime())/ (1000 * 3600 * 24)) %> dias </div>
             <% } %>
           </div>
           <footer>
