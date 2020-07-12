@@ -46,20 +46,6 @@ module.exports = class Ticket {
     this.isFav = isFav;
   }
 
-  save() {
-    getTicketsFromFile((tickets) => {
-      var index = tickets.findIndex((t) => t.id == this.id);
-      if (index === -1) {
-        tickets.push(this);
-      } else {
-        tickets[index] = this;
-      }
-      fs.writeFile(p, JSON.stringify(tickets), (err) => {
-        if (err !== null) console.log(err);
-      });
-    });
-  }
-
   static createTicket(title, description, type, endDate, createDate) {
     return new Ticket(
       uuid.v4(),
@@ -71,6 +57,22 @@ module.exports = class Ticket {
       this.STATE_AVAILABLE,
       false
     );
+  }
+
+  save() {
+    getTicketsFromFile((tickets) => {
+      var index = tickets.findIndex((t) => t.id == this.id);
+
+      if (index === -1) {
+        tickets.push(this);
+      } else {
+        tickets[index] = this;
+      }
+
+      fs.writeFile(p, JSON.stringify(tickets), (err) => {
+        if (err !== null) console.log(err);
+      });
+    });
   }
 
   static fetchAll(cb) {
