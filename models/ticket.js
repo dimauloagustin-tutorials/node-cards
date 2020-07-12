@@ -30,6 +30,11 @@ const getTicketsFromFile = (cb) => {
 };
 
 module.exports = class Ticket {
+  
+  static STATE_AVAILABLE = 'AVAILABLE';
+  static STATE_USED = 'USED';
+  static STATE_EXPIRED = 'EXPIRED';
+
   constructor(id, title, description, type, endDate, createDate, state, isFav) {
     this.id = id;
     this.title = title;
@@ -63,7 +68,7 @@ module.exports = class Ticket {
       type,
       endDate,
       createDate,
-      "AVAILABLE",
+      this.STATE_AVAILABLE,
       false
     );
   }
@@ -82,20 +87,20 @@ module.exports = class Ticket {
   static fetchAllAvailables(cb) {
     const currentDate = new Date().toISOString().substring(0, 10);
     getTicketsFromFile((tickets) => {
-      cb(tickets.filter((ticket) => ticket.state == "AVAILABLE"));
+      cb(tickets.filter((ticket) => ticket.state == this.STATE_AVAILABLE));
     });
   }
 
   static fetchAllExpired(cb) {
     const currentDate = new Date().toISOString().substring(0, 10);
     getTicketsFromFile((tickets) => {
-      cb(tickets.filter((ticket) => ticket.state == "EXPIRED"));
+      cb(tickets.filter((ticket) => ticket.state == this.STATE_EXPIRED));
     });
   }
 
   static fetchAllUsed(cb) {
     getTicketsFromFile((tickets) => {
-      cb(tickets.filter((ticket) => ticket.state == "USED"));
+      cb(tickets.filter((ticket) => ticket.state == this.STATE_USED));
     });
   }
 
