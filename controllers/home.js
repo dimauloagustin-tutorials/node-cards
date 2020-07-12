@@ -1,5 +1,5 @@
 const Ticket = require("../models/ticket");
-
+//TODO - make it look better
 exports.getCardsAll = (req, res, next) => {
   switch (req.query.view) {
     case "1":
@@ -38,4 +38,14 @@ exports.getCardsAll = (req, res, next) => {
       });
       break;
   }
+};
+
+exports.changeFavState = (req, res, next) => {
+  const id = req.body.id;
+  Ticket.fetchSpecific(id, (ticket) =>{
+    ticket.isFav = !ticket.isFav;
+    Ticket.update(id, ticket);
+
+    res.send({ favState: ticket.isFav });
+  });
 };

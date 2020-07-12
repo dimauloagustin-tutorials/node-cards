@@ -21,6 +21,7 @@
       <% for (let ticket of tickets) { %>
       <article class="card">
         <div id="ticket-container">
+          <input id="ID" type="hidden" value="<%= ticket.id %>">
           <h1>
             <%= ticket.title %>
           </h1>

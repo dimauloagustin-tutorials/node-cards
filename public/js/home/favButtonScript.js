@@ -1,23 +1,23 @@
 $(document).ready(function () {
-    //TODO - disable for mobile
-  $(".ticket-favButton").mouseover((event) => {
-    if ($(event.target).hasClass("fa-heart")) {
-      $(event.target).removeClass("fa-heart");
-      $(event.target).addClass("fa-heart-o");
-    } else {
-      $(event.target).removeClass("fa-heart-o");
-      $(event.target).addClass("fa-heart");
-    }
-  });
-  
-  //TODO - disable for mobile
-  $(".ticket-favButton").mouseout((event) => {
-    if ($(event.target).hasClass("fa-heart")) {
-      $(event.target).removeClass("fa-heart");
-      $(event.target).addClass("fa-heart-o");
-    } else {
-      $(event.target).removeClass("fa-heart-o");
-      $(event.target).addClass("fa-heart");
-    }
+  $(".ticket-favButton").click((event) => {
+    var api_url = "/change-fab-state";
+    var id = $(event.target).parents("#ticket-container").find("#ID").val();
+    $.ajax({
+      type: "POST",
+      url: api_url,
+      dataType: "json",
+      data: {
+        id: id,
+      },
+      success: function (result) {
+        if (result.favState) {
+          $(event.target).removeClass("fa-heart-o");
+          $(event.target).addClass("fa-heart");
+        } else {
+          $(event.target).removeClass("fa-heart");
+          $(event.target).addClass("fa-heart-o");
+        }
+      },
+    });
   });
 });

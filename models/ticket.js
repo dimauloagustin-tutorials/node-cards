@@ -29,7 +29,7 @@ const getTicketsFromFile = (cb) => {
   });
 };
 
-module.exports = class Product {
+module.exports = class Ticket {
   constructor(title, description, type, endDate, createDate) {
     this.id = uuid.v4();
     this.title = title;
@@ -50,10 +50,26 @@ module.exports = class Product {
     });
   }
 
+  static update(id, ticket) {
+    getTicketsFromFile((tickets) => {
+      tickets.splice(tickets.findIndex(t => t.id == id),1);
+      tickets.push(ticket);
+      fs.writeFile(p, JSON.stringify(tickets), (err) => {
+        if (err !== null) console.log(err);
+      });
+    });
+  }
+
   static fetchAll(cb) {
     getTicketsFromFile(cb);
   }
-  
+
+  static fetchSpecific(ticketId, cb) {
+    getTicketsFromFile((tickets) => {
+      cb(tickets.find((ticket) => ticket.id == ticketId));
+    });
+  }
+
   //TODO - refactor in one function
   static fetchAllAvailables(cb) {
     const currentDate = new Date().toISOString().substring(0, 10);
