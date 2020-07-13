@@ -1,29 +1,29 @@
 const Ticket = require("../models/ticket");
 //TODO - make it look better
 exports.getCards = (req, res, next) => {
-  switch (req.query.view) {
-    case "1":
+  switch (req.query.filter) {
+    case "AVAILABLE":
       Ticket.fetchByState(Ticket.STATE_AVAILABLE, (tickets) => {
         res.render("home/home", {
           tickets: tickets,
         });
       });
       break;
-    case "2":
+    case "FAVORITE":
       Ticket.fetchByFav(true, (tickets) => {
         res.render("home/home", {
           tickets: tickets,
         });
       });
       break;
-    case "3":
+    case "USED":
       Ticket.fetchByState(Ticket.STATE_USED, (tickets) => {
         res.render("home/home", {
           tickets: tickets,
         });
       });
       break;
-    case "4":
+    case "EXPIRED":
       Ticket.fetchByState(Ticket.STATE_EXPIRED, (tickets) => {
         res.render("home/home", {
           tickets: tickets,
