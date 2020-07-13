@@ -51,9 +51,8 @@ exports.changeFavState = (req, res, next) => {
       ticket.endDate,
       ticket.createDate,
       ticket.state,
-      ticket.isFav
+      !ticket.isFav
     );
-    editedTicket.isFav = !editedTicket.isFav;
     editedTicket.save();
     res.send({ favState: editedTicket.isFav });
   });
