@@ -57,3 +57,21 @@ exports.changeFavState = (req, res, next) => {
     res.send({ favState: editedTicket.isFav });
   });
 };
+
+exports.useTicket = (req, res, next) => {
+  const id = req.body.id;
+  Ticket.fetchSpecific(id, (ticket) => {
+    var editedTicket = new Ticket(
+      ticket.id,
+      ticket.title,
+      ticket.description,
+      ticket.type,
+      ticket.endDate,
+      ticket.createDate,
+      Ticket.STATE_USED,
+      ticket.isFav
+    );
+    editedTicket.save();
+    res.send({ state: editedTicket.state });
+  });
+};
