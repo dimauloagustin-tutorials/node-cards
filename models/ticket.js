@@ -10,30 +10,33 @@ const getTicketsFromFile = (cb) => {
       cb([]);
     } else {
       var tickets = JSON.parse(fileContent);
-      //TODO - quit this code, just temporal workaround
-      const currentDate = new Date().toISOString().substring(0, 10);
-      var expiredFound = false;
-      tickets.forEach((t) => {
-        if (t.state == "AVAILABLE" && t.endDate < currentDate) {
-          t.state = "EXPIRED";
-          expiredFound = true;
-        }
-      });
-      if (expiredFound)
-        fs.writeFile(p, JSON.stringify(tickets), (err) => {
-          if (err !== null) console.log(err);
+      if (!tickets.length > 0) {
+        cb([]);
+      } else {
+        //TODO - quit this code, just temporal workaround
+        const currentDate = new Date().toISOString().substring(0, 10);
+        var expiredFound = false;
+        tickets.forEach((t) => {
+          if (t.state == "AVAILABLE" && t.endDate < currentDate) {
+            t.state = "EXPIRED";
+            expiredFound = true;
+          }
         });
-      //TODO - quit this code, just temporal workaround
-      cb(tickets);
+        if (expiredFound)
+          fs.writeFile(p, JSON.stringify(tickets), (err) => {
+            if (err !== null) console.log(err);
+          });
+        //TODO - quit this code, just temporal workaround
+        cb(tickets);
+      }
     }
   });
 };
 
 module.exports = class Ticket {
-  
-  static STATE_AVAILABLE = 'AVAILABLE';
-  static STATE_USED = 'USED';
-  static STATE_EXPIRED = 'EXPIRED';
+  static STATE_AVAILABLE = "AVAILABLE";
+  static STATE_USED = "USED";
+  static STATE_EXPIRED = "EXPIRED";
 
   constructor(id, title, description, type, endDate, createDate, state, isFav) {
     this.id = id;
