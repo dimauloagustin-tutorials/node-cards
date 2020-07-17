@@ -10,50 +10,68 @@ const getTicketsFromFile = (cb) => {
       cb([]);
     } else {
       var tickets = JSON.parse(fileContent);
-      //TODO - quit this code, just temporal workaround
-      const currentDate = new Date().toISOString().substring(0, 10);
-      var expiredFound = false;
-      tickets.forEach((t) => {
-        if (t.state == "AVAILABLE" && t.endDate < currentDate) {
-          t.state = "EXPIRED";
-          expiredFound = true;
-        }
-      });
-      if (expiredFound)
-        fs.writeFile(p, JSON.stringify(tickets), (err) => {
-          if (err !== null) console.log(err);
+      if (!tickets.length > 0) {
+        cb([]);
+      } else {
+        //TODO - quit this code, just temporal workaround
+        const currentDate = new Date().toISOString().substring(0, 10);
+        var expiredFound = false;
+        tickets.forEach((t) => {
+          if (t.state == "AVAILABLE" && t.endDate < currentDate) {
+            t.state = "EXPIRED";
+            expiredFound = true;
+          }
         });
-      //TODO - quit this code, just temporal workaround
-      cb(tickets);
+        if (expiredFound)
+          fs.writeFile(p, JSON.stringify(tickets), (err) => {
+            if (err !== null) console.log(err);
+          });
+        //TODO - quit this code, just temporal workaround
+        cb(tickets);
+      }
     }
   });
 };
 
 module.exports = class Ticket {
-  constructor(title, description, type, endDate, createDate) {
-    this.id = uuid.v4();
+  static STATE_AVAILABLE = "AVAILABLE";
+  static STATE_USED = "USED";
+  static STATE_EXPIRED = "EXPIRED";
+
+  constructor(id, title, description, type, endDate, createDate, state, isFav) {
+    this.id = id;
     this.title = title;
     this.description = description;
     this.type = type;
     this.endDate = endDate;
     this.createDate = createDate;
-    this.state = "AVAILABLE"; //TODO - change to enum
-    this.isFav = false;
+    this.state = state;
+    this.isFav = isFav;
+  }
+
+  static createTicket(title, description, type, endDate, createDate) {
+    return new Ticket(
+      uuid.v4(),
+      title,
+      description,
+      type,
+      endDate,
+      createDate,
+      this.STATE_AVAILABLE,
+      false
+    );
   }
 
   save() {
     getTicketsFromFile((tickets) => {
-      tickets.push(this);
-      fs.writeFile(p, JSON.stringify(tickets), (err) => {
-        if (err !== null) console.log(err);
-      });
-    });
-  }
+      var index = tickets.findIndex((t) => t.id == this.id);
 
-  static update(id, ticket) {
-    getTicketsFromFile((tickets) => {
-      tickets.splice(tickets.findIndex(t => t.id == id),1);
-      tickets.push(ticket);
+      if (index === -1) {
+        tickets.push(this);
+      } else {
+        tickets[index] = this;
+      }
+
       fs.writeFile(p, JSON.stringify(tickets), (err) => {
         if (err !== null) console.log(err);
       });
@@ -70,30 +88,15 @@ module.exports = class Ticket {
     });
   }
 
-  //TODO - refactor in one function
-  static fetchAllAvailables(cb) {
-    const currentDate = new Date().toISOString().substring(0, 10);
+  static fetchByState(state, cb) {
     getTicketsFromFile((tickets) => {
-      cb(tickets.filter((ticket) => ticket.state == "AVAILABLE"));
+      cb(tickets.filter((ticket) => ticket.state == state));
     });
   }
 
-  static fetchAllExpired(cb) {
-    const currentDate = new Date().toISOString().substring(0, 10);
+  static fetchByFav(state, cb) {
     getTicketsFromFile((tickets) => {
-      cb(tickets.filter((ticket) => ticket.state == "EXPIRED"));
-    });
-  }
-
-  static fetchAllUsed(cb) {
-    getTicketsFromFile((tickets) => {
-      cb(tickets.filter((ticket) => ticket.state == "USED"));
-    });
-  }
-
-  static fetchAllFavorites(cb) {
-    getTicketsFromFile((tickets) => {
-      cb(tickets.filter((ticket) => ticket.isFav == true));
+      cb(tickets.filter((ticket) => ticket.isFav == state));
     });
   }
 };

@@ -1,30 +1,30 @@
 const Ticket = require("../models/ticket");
 //TODO - make it look better
-exports.getCardsAll = (req, res, next) => {
-  switch (req.query.view) {
-    case "1":
-      Ticket.fetchAllAvailables((tickets) => {
+exports.getCards = (req, res, next) => {
+  switch (req.query.filter) {
+    case "AVAILABLE":
+      Ticket.fetchByState(Ticket.STATE_AVAILABLE, (tickets) => {
         res.render("home/home", {
           tickets: tickets,
         });
       });
       break;
-    case "2":
-      Ticket.fetchAllFavorites((tickets) => {
+    case "FAVORITE":
+      Ticket.fetchByFav(true, (tickets) => {
         res.render("home/home", {
           tickets: tickets,
         });
       });
       break;
-    case "3":
-      Ticket.fetchAllUsed((tickets) => {
+    case "USED":
+      Ticket.fetchByState(Ticket.STATE_USED, (tickets) => {
         res.render("home/home", {
           tickets: tickets,
         });
       });
       break;
-    case "4":
-      Ticket.fetchAllExpired((tickets) => {
+    case "EXPIRED":
+      Ticket.fetchByState(Ticket.STATE_EXPIRED, (tickets) => {
         res.render("home/home", {
           tickets: tickets,
         });
@@ -42,10 +42,36 @@ exports.getCardsAll = (req, res, next) => {
 
 exports.changeFavState = (req, res, next) => {
   const id = req.body.id;
-  Ticket.fetchSpecific(id, (ticket) =>{
-    ticket.isFav = !ticket.isFav;
-    Ticket.update(id, ticket);
+  Ticket.fetchSpecific(id, (ticket) => {
+    var editedTicket = new Ticket(
+      ticket.id,
+      ticket.title,
+      ticket.description,
+      ticket.type,
+      ticket.endDate,
+      ticket.createDate,
+      ticket.state,
+      !ticket.isFav
+    );
+    editedTicket.save();
+    res.send({ favState: editedTicket.isFav });
+  });
+};
 
-    res.send({ favState: ticket.isFav });
+exports.useTicket = (req, res, next) => {
+  const id = req.body.id;
+  Ticket.fetchSpecific(id, (ticket) => {
+    var editedTicket = new Ticket(
+      ticket.id,
+      ticket.title,
+      ticket.description,
+      ticket.type,
+      ticket.endDate,
+      ticket.createDate,
+      Ticket.STATE_USED,
+      ticket.isFav
+    );
+    editedTicket.save();
+    res.send({ state: editedTicket.state });
   });
 };
